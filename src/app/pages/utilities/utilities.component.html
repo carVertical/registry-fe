@@ -1,0 +1,66 @@
+<!-- Uses a transparent header that draws on top of the layout's background -->
+
+<div class="demo-layout-transparent mdl-layout mdl-js-layout">
+
+  <header class="mdl-layout__header mdl-layout__header--transparent">
+    <div class="mdl-layout__header-row">
+      <!-- Title -->
+      <span class="mdl-layout-title">Dapps</span>
+      <!-- Add spacer, to align navigation to the right -->
+      <div class="mdl-layout-spacer"></div>
+      <!-- Navigation -->
+      <nav class="mdl-navigation">
+        <a class="mdl-navigation__link" href="https://www.carvertical.com">carVertical</a>
+        <a class="mdl-navigation__link" href="/">Home</a>
+        <a class="mdl-navigation__link" href="/vin">VIN per Contract</a>
+        <a class="mdl-navigation__link" href="/utilities">Utilities</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="mdl-layout__content">
+
+
+    <form>
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" id="address" name="address" [(ngModel)]="address">
+        <label class="mdl-textfield__label" for="address">Enter your contract address..</label>
+      </div>
+
+      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="findContract()"
+              type="button">
+        Search
+      </button>
+      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="generateContractEvents()"
+              type="button">
+        Generate Test Data
+      </button>
+      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="readEvents()"
+              type="button">
+        Get Event Details
+      </button>
+
+    </form>
+
+    <div>
+      {{'Address is: ' + address}}
+    </div>
+    <div>
+      {{'Contract is: ' + data }}
+    </div>
+
+    <ul class="demo-list-item mdl-list">
+      <li class="mdl-list__item">
+        <i class="material-icons ">directions_car</i>
+        <span class="address">registrant</span> || <span class="address">vin</span> || <span class="address">vehicle</span>
+      </li>
+      <li class="mdl-list__item" *ngFor="let entry of register">
+        <i class="material-icons ">directions_car</i>
+        <span class="address">{{ entry._registrant }}</span> || <span class="address">{{ entry._strVin }}</span> || <span class="address">{{ entry._vehicle }}</span>
+      </li>
+    </ul>
+
+  </main>
+
+
+</div>

@@ -1,0 +1,39 @@
+<!-- Uses a transparent header that draws on top of the layout's background -->
+
+<div class="demo-layout-transparent mdl-layout mdl-js-layout">
+  <header class="mdl-layout__header mdl-layout__header--transparent">
+    <div class="mdl-layout__header-row">
+      <!-- Title -->
+      <span class="mdl-layout-title">Dapps</span>
+      <!-- Add spacer, to align navigation to the right -->
+      <div class="mdl-layout-spacer"></div>
+      <!-- Navigation -->
+      <nav class="mdl-navigation">
+        <a class="mdl-navigation__link" href="https://www.carvertical.com">carVertical</a>
+        <a class="mdl-navigation__link" href="/">Home</a>
+        <a class="mdl-navigation__link" href="/vin">VIN per Contract</a>
+        <a class="mdl-navigation__link" href="/utilities">Utilities</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="mdl-layout__content">
+
+
+    <form>
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" id="vin" name="vin"  [(ngModel)]="vin">
+        <label class="mdl-textfield__label" for="vin">Enter your VIN..</label>
+      </div>
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" id="name" name="name"  [(ngModel)]="name">
+        <label class="mdl-textfield__label" for="name">Enter your name..</label>
+      </div>
+
+      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="claimOwnership()"
+              type="button">
+        Claim
+      </button>
+    </form>
+  </main>
+</div>

@@ -1,0 +1,65 @@
+<!-- Uses a transparent header that draws on top of the layout's background -->
+
+<div class="demo-layout-transparent mdl-layout mdl-js-layout">
+  <header class="mdl-layout__header mdl-layout__header--transparent">
+    <div class="mdl-layout__header-row">
+      <!-- Title -->
+      <span class="mdl-layout-title">VIN per contract</span>
+      <!-- Add spacer, to align navigation to the right -->
+      <div class="mdl-layout-spacer"></div>
+      <!-- Navigation -->
+      <nav class="mdl-navigation">
+        <a class="mdl-navigation__link" href="https://www.carvertical.com">carVertical</a>
+        <a class="mdl-navigation__link" href="/">Home</a>
+        <a class="mdl-navigation__link" href="/vin">VIN per Contract</a>
+        <a class="mdl-navigation__link" href="/utilities">Utilities</a>
+      </nav>
+    </div>
+  </header>
+  <main class="mdl-layout__content">
+    <!-- build  show_chart network_check-->
+
+    <form>
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" id="address" name="address" [(ngModel)]="address">
+        <label class="mdl-textfield__label" for="address">Enter your contract address..</label>
+      </div>
+
+      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="findContract()"
+              type="button">
+        Search
+      </button>
+    </form>
+
+    <div class="mdl-grid">
+      <div class="mdl-layout-spacer"></div>
+      <div class="mdl-cell mdl-cell--10-col">
+        <div class="vehicle-card-wide mdl-card mdl-shadow--2dp">
+          <div class="mdl-card__title">
+            <h2 class="mdl-card__title-text"><i class="material-icons ">directions_car</i> {{ vinNumber }}</h2>
+          </div>
+          <div class="mdl-card__supporting-text">
+            This car registered to: <a href="https://etherscan.io/address/{{ registrant }}">{{ registrant }}</a>
+          </div>
+          <div class="mdl-card__actions mdl-card--border">
+            <span [hidden]="odometerEvents[1]">All events should go here...</span>
+            <ul class="demo-list-item mdl-list" [hidden]="!odometerEvents[1]">
+              <h2 class="mdl-card__title-text"><i class="material-icons ">network_check</i> Odometer Events</h2>
+              <li *ngFor="let odo of odometerEvents">
+                <span class="address"><a href="#">{{ odo.args._hash }}</a> on {{ timeConverter(odo.args._timestamp) }}</span>
+              </li>
+            </ul>
+            <ul class="demo-list-item mdl-list" [hidden]="!damageEvents[1]">
+              <h2 class="mdl-card__title-text"><i class="material-icons ">build</i> Damage Events</h2>
+              <li *ngFor="let dam of damageEvents">
+                <span class="address"><a href="#">{{ dam.args._hash }}</a> on {{ timeConverter(dam.args._timestamp) }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </main>
+</div>
