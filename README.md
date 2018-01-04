@@ -1,8 +1,6 @@
 # Registry FE
 
 To start the project, please:
-* `testrpc -m "one two three four five"`
-* `truffle deploy --network local`
 * `npm start`
 * go to [http://localhost:4200](http://localhost:4200)
 
