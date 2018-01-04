@@ -2,12 +2,15 @@ const Registry = artifacts.require('./Registry.sol');
 const Vehicle = artifacts.require('./Vehicle.sol');
 const RBAC = artifacts.require('./rbac/RBAC.sol');
 const Roles = artifacts.require('./rbac/Roles.sol');
+const Utilities = artifacts.require('./utilities/Utilities.sol');
 
 module.exports = function (deployer) {
   deployer.deploy(Roles);
   deployer.link(Roles, RBAC);
   deployer.deploy(RBAC);
   deployer.link(RBAC, Registry);
+  deployer.deploy(Utilities);
+  deployer.link(Utilities, Registry);
   deployer.deploy(
     Vehicle,
     'VINXXX1234134',

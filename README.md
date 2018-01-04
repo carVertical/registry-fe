@@ -3,7 +3,7 @@
 To start the project, please:
 * `testrpc -m "one two three four five"`
 * `truffle deploy --network local`
-* `ng serve`
+* `npm start`
 * go to [http://localhost:4200](http://localhost:4200)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.4.9.

@@ -4,6 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
+    "prestart": "./src/bin/start-local-blockchain.sh",
     "start": "ng serve",
     "build": "ng build",
     "test": "truffle test",
