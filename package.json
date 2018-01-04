@@ -1,6 +1,6 @@
 {
-  "name": "reports-mvp",
-  "version": "0.0.1",
+  "name": "registry-fe",
+  "version": "1.0.0",
   "license": "MIT",
   "scripts": {
     "ng": "ng",

@@ -2,16 +2,19 @@ pragma solidity ^0.4.18;
 
 import "./rbac/RBAC.sol";
 import "./Vehicle.sol";
+import "./utils/Utilities.sol";
 
-contract Registry {
+contract Registry is RBAC {
   address public creator;
+  address public registrant;
   string public vin;
-  mapping(bytes32 => address) VinForAddress;
+  mapping(string => address) VinForAddress;
 
     function Registry() public {
       creator = msg.sender;
     }
 
+  // ===== Events =====
   event ClaimedVehicleRecord(
     address indexed _registrant,
     bytes32 indexed _vin,
@@ -19,13 +22,18 @@ contract Registry {
     address indexed _vehicle
   );
 
-  function registerVehicle(bytes32 _vin, string _strVin) public payable {
-    address vehicle = new Vehicle(_strVin, creator);
-    VinForAddress[_vin] = vehicle;
-    addVehicleClaim(creator, _vin, _strVin, vehicle);
+  // ====== Functions ======
+  function registerVehicle(string _strVin, address _registrant) public payable
+  onlyAdmin
+  {
+    address vehicle = new Vehicle(_strVin, _registrant);
+    VinForAddress[_strVin] = vehicle;
+    addVehicleClaim(_registrant, _strVin, vehicle);
   }
 
-  function addVehicleClaim(address registrant, bytes32 _vin, string _strVin, address _vehicleContract) public {
-    ClaimedVehicleRecord(registrant, _vin, _strVin, _vehicleContract);
+  function addVehicleClaim(address _registrant, string _strVin, address _vehicleContract) public {
+    ClaimedVehicleRecord(_registrant, Utilities.convertStringToBytes32(_strVin), _strVin, _vehicleContract);
   }
+
+
 }

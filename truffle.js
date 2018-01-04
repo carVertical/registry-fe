@@ -3,7 +3,7 @@ module.exports = {
     development: {
         host: "35.158.194.23",
         port: 7545,
-        from: "0x1232c4f0b72c867ca8eb2ca52a0ba13ea5e16a83",// mnemonic: one two three four five
+        from: "0x1232c4f0b72c867ca8eb2ca52a0ba13ea5e16a83",
         network_id: "*"
     },
     aws: {

@@ -97,7 +97,7 @@ export class UtilitiesComponent implements OnInit, OnChanges {
 
           return new Promise(function(resolve, reject) {
             allevents.get(function (error, result) {
-              if (error !== null) {return reject(error);}
+              if (error !== null) {return reject(error); }
               resolve (result);
             });
           });

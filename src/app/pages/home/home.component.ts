@@ -77,10 +77,10 @@ export class HomeComponent implements OnInit, OnChanges {
           deployed = instance;
           console.log('deployed');
           console.log(deployed);
-          console.log('----------')
+          console.log('----------');
           return deployed.registerVehicle(
             this.vin,
-            this.vin,
+            this.account, // TODO: should be a registrant's address though
             {
               from: this.account,
               gas: 4712388,
