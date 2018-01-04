@@ -35,5 +35,9 @@ contract Registry is RBAC {
     ClaimedVehicleRecord(_registrant, Utilities.convertStringToBytes32(_strVin), _strVin, _vehicleContract);
   }
 
+  function getMapping(string _vin) public constant returns (address add) {
+  return VinForAddress[_vin];
+  }
+
 
 }

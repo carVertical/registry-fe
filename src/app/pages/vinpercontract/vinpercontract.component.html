@@ -21,6 +21,18 @@
 
     <form>
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" id="vinId" name="vinId" [(ngModel)]="VIN">
+        <label class="mdl-textfield__label" for="vinId">Enter your Vehicle Identification Number</label>
+      </div>
+
+      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="findVinContract()"
+              type="button">
+        Search
+      </button>
+    </form>
+
+    <form>
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
         <input class="mdl-textfield__input" type="text" id="address" name="address" [(ngModel)]="address">
         <label class="mdl-textfield__label" for="address">Enter your contract address..</label>
       </div>
