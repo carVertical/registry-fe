@@ -41,6 +41,7 @@ export class VinpercontractComponent implements OnInit, OnChanges {
   VIN = '';
   odometerEvents = [];
   damageEvents = [];
+  visible = false;
 
   constructor() {
     this.instantiateWeb3();
@@ -113,28 +114,6 @@ export class VinpercontractComponent implements OnInit, OnChanges {
 
   readEvents = () => {
     console.log('read events');
-
-    let reg;
-
-    Vehicle
-      .deployed()
-      .then( instance => {
-        reg = instance;
-        const t = reg.readRegistry('VIN123');
-        console.log('test: [' + t + ']');
-        console.log(t);
-        return t;
-      })
-      .then( results => {
-        console.log(results);
-      })
-      .catch(e => {
-        console.log('error' + e );
-      });
-
-
-
-
     let meta;
     Vehicle
       .deployed()
@@ -145,7 +124,6 @@ export class VinpercontractComponent implements OnInit, OnChanges {
       .catch(e => {
         console.log('error' + e );
       });
-
   }
 
   findContract = () => {
@@ -231,69 +209,9 @@ export class VinpercontractComponent implements OnInit, OnChanges {
         })
         .then((value) => {
 
-          this.registrant = value[0];
-          this.vinNumber = value[1];
-          for (let i = 0; i < value[2].length; i++) {
-            if (value[2][i].event === 'OdometerRecord') {
-              this.odometerEvents.push(
-                value[2][i]
-              );
-            }
-          }
-
-          for (let i = 0; i < value[2].length; i++) {
-            if (value[2][i].event === 'DamageRecord') {
-              this.damageEvents.push(
-                value[2][i]
-              );
-            }
-          }
-          console.log('damgeRecs');
-          console.log(this.damageEvents);
-          console.log('----');
-
-          console.log('logs');
-          console.log(value[2]);
-          console.log('------');
-          // allevents.stopWatching();
-        })
-        .catch((e) => {
-          console.log('error' + e);
-        });
-
-      console.log(this.accounts);
-  }
-
-  findVinContract2 = () => {
-      let meta;
-      let reg;
-
-    Vehicle
-      .deployed()
-      .then( instance => {
-        reg = instance;
-        return reg.readRegistry(this.VIN);
-      })
-      .then( results => {
-        return Vehicle.at(results);
-      })
-        .then((instance) => {
-          meta = instance;
-          console.log(meta);
-          const allevents = meta.allEvents({fromBlock: 0, toBlock: 'latest'});
-          return Promise.all([
-            meta.registrant(),
-            meta.vin(),
-            new Promise(function(resolve, reject) {
-              allevents.get(function (error, result) {
-                if (error !== null) {return reject(error); }
-                resolve (result);
-              });
-            })
-          ]);
-        })
-        .then((value) => {
-
+          this.visible = true;
+          this.odometerEvents = [];
+          this.damageEvents = [];
           this.registrant = value[0];
           this.vinNumber = value[1];
           for (let i = 0; i < value[2].length; i++) {

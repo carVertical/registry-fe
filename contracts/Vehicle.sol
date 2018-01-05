@@ -1,18 +1,14 @@
 pragma solidity ^0.4.4;
 
 import "./rbac/RBAC.sol";
-import "./Registry.sol";
 
 contract Vehicle is RBAC {
   address public registrant;
   string public vin;
-  Registry reg;
 
   mapping(string => uint) latestRecordIds;
 
   function Vehicle(string _vin, address _registrant) public payable {
-    address add = 0xa5834882AD38Ba30D69789A87f7AF489D905e8e9;
-    reg = Registry(add);
     registrant = _registrant;
     vin = _vin;
     addRole(registrant, "registrant");
@@ -71,11 +67,6 @@ contract Vehicle is RBAC {
   );
 
   // ===== Functions =====
-  // Not used as we can call the registry contract instead of calling this function
-  function readRegistry(string _vin) public view returns(address vinAddress){
-    return reg.getMapping(_vin);
-  }
-
   function addOdometerRecord(string recordHash, uint256 timestamp) public
   onlyAdminOrRegistrant
   {
