@@ -21,17 +21,29 @@
 
     <form>
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input class="mdl-textfield__input" type="text" id="address" name="address" [(ngModel)]="address">
-        <label class="mdl-textfield__label" for="address">Enter your contract address..</label>
+        <input class="mdl-textfield__input" type="text" id="vinId" name="vinId" [(ngModel)]="VIN">
+        <label class="mdl-textfield__label" for="vinId">Enter your Vehicle Identification Number</label>
       </div>
 
-      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="findContract()"
+      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="findVinContract()"
               type="button">
         Search
       </button>
     </form>
 
-    <div class="mdl-grid">
+<!--    <form>
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield&#45;&#45;floating-label">
+        <input class="mdl-textfield__input" type="text" id="address" name="address" [(ngModel)]="address">
+        <label class="mdl-textfield__label" for="address">Enter your contract address..</label>
+      </div>
+
+      <button class="mdl-button mdl-js-button mdl-button&#45;&#45;raised mdl-js-ripple-effect" (click)="findContract()"
+              type="button">
+        Search
+      </button>
+    </form>-->
+
+    <div class="mdl-grid" [hidden]="!visible">
       <div class="mdl-layout-spacer"></div>
       <div class="mdl-cell mdl-cell--10-col">
         <div class="vehicle-card-wide mdl-card mdl-shadow--2dp">
