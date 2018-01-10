@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "prestart": "./src/bin/start-local-blockchain.sh",
-    "start": "ng serve",
+    "start": "ng serve  --proxy-config proxy.conf.json",
     "build": "ng build",
     "test": "truffle test",
     "lint": "ng lint",
