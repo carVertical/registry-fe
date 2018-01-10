@@ -1,0 +1,6 @@
+{
+  "/localgeth": {
+    "target": "http://localhost:9545",
+    "secure": false
+  }
+}

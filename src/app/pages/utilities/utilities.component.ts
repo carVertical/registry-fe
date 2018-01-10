@@ -1,11 +1,11 @@
-///<reference path="../../../../node_modules/@angular/core/src/metadata/directives.d.ts"/>
 import {Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 
 const Web3 = require('web3');
 const contract = require('truffle-contract');
 const CarVerticalRegistry = contract(require('../../../../build/contracts/Vehicle.json'));
+const ethNode = 'http://localhost:4200/localgeth';
 
-CarVerticalRegistry.setProvider(new Web3.providers.HttpProvider('http://localhost:8545'));
+CarVerticalRegistry.setProvider(new Web3.providers.HttpProvider(ethNode));
 if (typeof CarVerticalRegistry.currentProvider.sendAsync !== 'function') {
   CarVerticalRegistry.currentProvider.sendAsync = function () {
     return CarVerticalRegistry.currentProvider.send.apply(
@@ -13,9 +13,9 @@ if (typeof CarVerticalRegistry.currentProvider.sendAsync !== 'function') {
     );
   };
 }
-const Registry = contract(require('../../../../build/contracts/Registry.json'));
 
-Registry.setProvider(new Web3.providers.HttpProvider('http://localhost:8545'));
+const Registry = contract(require('../../../../build/contracts/Registry.json'));
+Registry.setProvider(new Web3.providers.HttpProvider(ethNode));
 if (typeof Registry.currentProvider.sendAsync !== 'function') {
   Registry.currentProvider.sendAsync = function () {
     return Registry.currentProvider.send.apply(
@@ -23,6 +23,9 @@ if (typeof Registry.currentProvider.sendAsync !== 'function') {
     );
   };
 }
+
+declare let window: any;
+
 @Component({
   selector: 'app-utilities',
   templateUrl: './utilities.component.html',
@@ -52,11 +55,37 @@ export class UtilitiesComponent implements OnInit, OnChanges {
 
 
   instantiateWeb3 = () => {
-    // Checking if Web3 has been injected by the browser (Mist/MetaMask)
-    // we should go for our own geth node with geth --rpc --rpcapi account eth
-    this.web3 = new Web3(
-      new Web3.providers.HttpProvider('http://localhost:8545')
-    );
+/*
+    if (typeof window.web3 !== 'undefined') {
+      // Use Mist/MetaMask's provider
+      console.log ('using Metamask');
+      this.web3 = new Web3(window.web3.currentProvider);
+      Registry.setProvider(this.web3.currentProvider);
+      CarVerticalRegistry.setProvider(this.web3.currentProvider);
+    } else {
+      console.log('No web3? You should consider trying MetaMask!');
+*/
+
+      // Hack to provide backwards compatibility for Truffle, which uses web3js 0.20.x
+  /*    Web3.providers.HttpProvider.prototype.sendAsync = Web3.providers.HttpProvider.prototype.send;*/
+      // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
+      this.web3 = new Web3(new Web3.providers.HttpProvider(ethNode));
+/*      Registry.setProvider(new Web3.providers.HttpProvider(ethNode));
+    }*/
+
+    this.web3.eth.getAccounts((err, accs) => {
+      if (err != null) {
+        alert('There was an error fetching your accounts.');
+        return;
+      }
+
+      if (accs.length === 0) {
+        alert('Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.');
+        return;
+      }
+      this.accounts = accs;
+      this.account = this.accounts[0];
+    });
   }
 
   test = () => {
@@ -88,21 +117,30 @@ export class UtilitiesComponent implements OnInit, OnChanges {
   }
 
   readEvents = () => {
+    console.log('readig events');
+    this.register = [];
     let meta;
       Registry
       .deployed()
       .then(instance => {
         meta = instance;
-          const allevents = meta.allEvents({fromBlock: 0, toBlock: 'latest'});
+        console.log('within deployed');
+        console.log(meta);
+        console.log(meta.vin());
+          const allevents = meta.ClaimedVehicleRecord({}, {fromBlock: 0, toBlock: 'latest'});
 
+        console.log(allevents);
           return new Promise(function(resolve, reject) {
             allevents.get(function (error, result) {
-              if (error !== null) {return reject(error); }
+              if (error !== null) {console.log('error at promise'); return reject(error); }
+              console.log(allevents);
               resolve (result);
             });
           });
         })
         .then((results) => {
+          console.log('results are:');
+          console.log(results);
           for (let i = 0; i < results.length; i++) {
             this.register.push(
               results[i].args

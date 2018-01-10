@@ -7,23 +7,25 @@ const Web3 = require('web3');
 const contract = require('truffle-contract');
 const Registry = contract(require('../../../../build/contracts/Registry.json'));
 const Vehicle = contract(require('../../../../build/contracts/Vehicle.json'));
+const ethNode = 'http://localhost:9545';
 
-Registry.setProvider(new Web3.providers.HttpProvider('http://localhost:8545'));
-if (typeof Registry.currentProvider.sendAsync !== 'function') {
+/*Registry.setProvider(new Web3.providers.HttpProvider(ethNode));*/
+/*if (typeof Registry.currentProvider.sendAsync !== 'function') {
   Registry.currentProvider.sendAsync = function () {
     return Registry.currentProvider.send.apply(
       Registry.currentProvider, arguments
     );
   };
 }
-Vehicle.setProvider(new Web3.providers.HttpProvider('http://localhost:8545'));
+Vehicle.setProvider(new Web3.providers.HttpProvider(ethNode));
 if (typeof Vehicle.currentProvider.sendAsync !== 'function') {
   Vehicle.currentProvider.sendAsync = function () {
     return Vehicle.currentProvider.send.apply(
       Vehicle.currentProvider, arguments
     );
   };
-}
+}*/
+declare let window: any;
 
 @Component({
   selector: 'app-home',
@@ -50,14 +52,17 @@ export class HomeComponent implements OnInit, OnChanges {
   }
 
   instantiateWeb3 = () => {
-    // Checking if Web3 has been injected by the browser (Mist/MetaMask)
-    // we should go for our own geth node with geth --rpc --rpcapi account eth
-    this.web3 = new Web3(
-      new Web3.providers.HttpProvider('http://localhost:8545')
-    );
-  }
+    if (typeof window.web3 !== 'undefined') {
+      console.log ('using Metamask');
+      this.web3 = new Web3(window.web3.currentProvider);
+      Registry.setProvider(this.web3.currentProvider);
+    } else {
+      console.log('No web3? You should consider trying MetaMask!');
+      Web3.providers.HttpProvider.prototype.sendAsync = Web3.providers.HttpProvider.prototype.send;
+      this.web3 = new Web3(new Web3.providers.HttpProvider(ethNode));
+      Registry.setProvider(new Web3.providers.HttpProvider(ethNode));
+    }
 
-  claimOwnership = () => {
     this.web3.eth.getAccounts((err, accs) => {
       if (err != null) {
         alert('There was an error fetching your accounts.');
@@ -65,12 +70,17 @@ export class HomeComponent implements OnInit, OnChanges {
       }
 
       if (accs.length === 0) {
-        alert('Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.');
+        alert('0 accounts found. Make sure your Ethereum client is configured correctly.');
         return;
       }
       this.accounts = accs;
       this.account = this.accounts[0];
+    });
+  }
 
+  claimOwnership = () => {
+
+      console.log('entering claimOwnership. account #' + this.account);
       let deployed;
       Registry.deployed()
         .then((instance) => {
@@ -82,9 +92,7 @@ export class HomeComponent implements OnInit, OnChanges {
             this.vin,
             this.account, // TODO: should be a registrant's address though
             {
-              from: this.account,
-              gas: 4712388,
-              gasPrice: 100000000000
+              from: this.account
             });
         })
         .then((result) => {
@@ -98,6 +106,5 @@ export class HomeComponent implements OnInit, OnChanges {
         });
 
       console.log(this.accounts);
-    });
   }
 }
